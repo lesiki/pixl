@@ -29,6 +29,10 @@ body {
 .pixel.empty {
   border: 3px solid #eee;
 }
+.pixel.s20 {
+  width: 20px;
+  height: 20px;
+}
 .pixel.s60 {
   width: 60px;
   height: 60px;

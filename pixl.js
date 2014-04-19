@@ -189,7 +189,7 @@ Pixl = function() {
 		});
 	},
 	init = function() {
-		canvasSize = 60;
+		canvasSize = 30;
 		createPixels(canvasSize);
 		sizePixels(canvasSize);
 		currentColour = "#789491";
