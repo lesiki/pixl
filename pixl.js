@@ -55,6 +55,7 @@ Pixl = function() {
 		$('#canvas').mouseup(function() { mouseIsDown = false; });
 		$('#canvas').mouseleave(function() { mouseIsDown = false; });
 		$('#createNewLayer').click(createNewLayer);
+		$('#addLight').click(function() { addLighting(0, 0, 0.1, 0.4, currentLayer); });
 	},
 	createNewLayer = function() {
 		var layerName = prompt("Please name the new layer", "LayerX");
@@ -126,6 +127,7 @@ Pixl = function() {
 		return "#"+RR+GG+BB;
 	}
 	addLighting = function(lightSourceX, lightSourceY, maxLightIntensity, minLightIntensity, layerName) {
+		console.log('hi');
 		var thisPixelX, thisPixelY, distanceFromLight, baseColour, distanceAsFractionOfMaxDistance, newColour;
 		lightSourceX = parseInt(lightSourceX);
 		lightSourceY = parseInt(lightSourceY);
