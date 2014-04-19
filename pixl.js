@@ -4,8 +4,15 @@ $(function() {
 });
 Pixl = function() {
 	var
+	Directions = {
+		TOP : 0,
+		RIGHT : 1,
+		BOTTOM : 3,
+		LEFT : 4
+	},
 	canvasDimensions = 600,
 	currentColour,
+	canvasSize,
 	layerRecording = false,
 	mouseIsDown = false,
 	defaultLayerName = 'newLayer',
@@ -13,7 +20,7 @@ Pixl = function() {
 		var canvas = $('#canvas'),
 		i, pixel;
 		for(i=0; i < (countPerAxis * countPerAxis); i++) {
-			pixel = '<div class="empty pixel" x="' + (i % countPerAxis) + '" y=' + Math.floor(i/countPerAxis) + '"></div>';
+			pixel = '<div class="empty pixel" data-x="' + (i % countPerAxis) + '" data-y="' + Math.floor(i/countPerAxis) + '"></div>';
 			canvas.append(pixel);
 		}
 	},
@@ -26,6 +33,25 @@ Pixl = function() {
 		if(layerRecording) {
 			$(this).attr('data-layername', defaultLayerName);
 		}
+	},
+	isLayerEdge = function(x, y, layerName, direction) {
+		x = parseInt(x);
+		y = parseInt(y);
+		console.log.apply(console, arguments);
+		// Assumes specified pixel is in the layer
+		if(direction === Directions.TOP) {
+			return y === 0 || $('.pixel[data-x=' + x + '][data-y=' + (y - 1) + ']').attr('data-layername') !== layerName;
+		}
+		else if(direction === Directions.BOTTOM) {
+			return y === (canvasSize - 1) || $('.pixel[data-x=' + x + '][data-y=' + (y + 1) + ']').attr('data-layername') !== layerName;
+		}
+		else if(direction === Directions.RIGHT) {
+			return x === (canvasSize - 1) || $('.pixel[data-x=' + (x + 1) + '][data-y=' + y + ']').attr('data-layername') !== layerName;
+		}
+		else if(direction === Directions.LEFT) {
+			return x === 0 || $('.pixel[data-x=' + (x - 1) + '][data-y=' + y + ']').attr('data-layername') !== layerName;
+		}
+		return false;
 	},
 	bindListeners = function() {
 		$('.pixel').mousedown(handlePixelClick).mouseenter(handleMouseEntry);
@@ -40,6 +66,7 @@ Pixl = function() {
 			$(this).html('start recording a new layer');
 			$('.pixel[data-layername=' + defaultLayerName + ']').attr('data-layername', layerName);
 			$('#selectLayer').append('<option value="' + layerName + '">' + layerName + '</option>').removeAttr('disabled');
+			flashLayerBounds(layerName);
 		}
 		else {
 			$(this).html('stop recording');
@@ -63,12 +90,31 @@ Pixl = function() {
 		e.returnValue=false;
 		return false;
 	},
+	flashLayerBounds = function(layername) {
+		var thisPixel;
+		$('.pixel[data-layername=' + layername + ']').each(function() {
+			thisPixel = $(this);
+			if(isLayerEdge(thisPixel.attr('data-x'), thisPixel.attr('data-y'), layername, Directions.TOP)) {
+				thisPixel.css('border-top', '5px solid #f00');
+			}
+			if(isLayerEdge(thisPixel.attr('data-x'), thisPixel.attr('data-y'), layername, Directions.BOTTOM)) {
+				thisPixel.css('border-bottom', '5px solid #f00');
+			}
+			if(isLayerEdge(thisPixel.attr('data-x'), thisPixel.attr('data-y'), layername, Directions.LEFT)) {
+				thisPixel.css('border-left', '5px solid #f00');
+			}
+			if(isLayerEdge(thisPixel.attr('data-x'), thisPixel.attr('data-y'), layername, Directions.RIGHT)) {
+				thisPixel.css('border-right', '5px solid #f00');
+			}
+		});
+	},
 	initialiseTools = function() {
 		$('select#selectLayer').attr('disabled', 'disabled');
 	},
 	init = function() {
-		createPixels(10);
-		sizePixels(10);
+		canvasSize = 10;
+		createPixels(canvasSize);
+		sizePixels(canvasSize);
 		currentColour = "#789491";
 		bindListeners();
 		initialiseTools();
