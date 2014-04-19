@@ -95,18 +95,19 @@ Pixl = function() {
 		$('.pixel[data-layername=' + layername + ']').each(function() {
 			thisPixel = $(this);
 			if(isLayerEdge(thisPixel.attr('data-x'), thisPixel.attr('data-y'), layername, Directions.TOP)) {
-				thisPixel.css('border-top', '5px solid #f00');
+				thisPixel.addClass('topEdge');
 			}
 			if(isLayerEdge(thisPixel.attr('data-x'), thisPixel.attr('data-y'), layername, Directions.BOTTOM)) {
-				thisPixel.css('border-bottom', '5px solid #f00');
+				thisPixel.addClass('bottomEdge');
 			}
 			if(isLayerEdge(thisPixel.attr('data-x'), thisPixel.attr('data-y'), layername, Directions.LEFT)) {
-				thisPixel.css('border-left', '5px solid #f00');
+				thisPixel.addClass('leftEdge');
 			}
 			if(isLayerEdge(thisPixel.attr('data-x'), thisPixel.attr('data-y'), layername, Directions.RIGHT)) {
-				thisPixel.css('border-right', '5px solid #f00');
+				thisPixel.addClass('rightEdge');
 			}
 		});
+		setTimeout(function() { $('.topEdge,.bottomEdge,.leftEdge,.rightEdge').removeClass('topEdge bottomEdge leftEdge rightEdge'); }, 1000);
 	},
 	initialiseTools = function() {
 		$('select#selectLayer').attr('disabled', 'disabled');

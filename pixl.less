@@ -1,4 +1,14 @@
 * { box-sizing:border-box; }
+.property_(@property, @value) {
+    _: 0 ~"; @{property}:" @value;
+}
+
+.vendor(@property, @value) {
+    .property_('-webkit-@{property}', @value);
+    .property_( '-khtml-@{property}', @value);
+    .property_(   '-moz-@{property}', @value);
+    .property_(          @property,   @value);
+}
 body {
 	font-size:0;
 }
@@ -17,6 +27,7 @@ body {
 	display:inline-block;
 }
 .pixel {
+	.vendor(transition, "border 1s");
 	display:inline-block;
 	&.empty {
 		border:3px solid #eee;
@@ -24,6 +35,18 @@ body {
 	&.s60 {
 		width:60px;
 		height:60px;
+	}
+	&.topEdge {
+		border-top:3px solid #f00;
+	}
+	&.bottomEdge {
+		border-bottom:3px solid #f00;
+	}
+	&.leftEdge {
+		border-left:3px solid #f00;
+	}
+	&.rightEdge {
+		border-right:3px solid #f00;
 	}
 	cursor:pointer;
 }

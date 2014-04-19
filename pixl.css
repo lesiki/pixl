@@ -19,6 +19,10 @@ body {
   display: inline-block;
 }
 .pixel {
+  _: 0 ; -webkit-transition: "border 1s";
+  _: 0 ; -khtml-transition: "border 1s";
+  _: 0 ; -moz-transition: "border 1s";
+  _: 0 ; transition: "border 1s";
   display: inline-block;
   cursor: pointer;
 }
@@ -28,4 +32,16 @@ body {
 .pixel.s60 {
   width: 60px;
   height: 60px;
+}
+.pixel.topEdge {
+  border-top: 3px solid #f00;
+}
+.pixel.bottomEdge {
+  border-bottom: 3px solid #f00;
+}
+.pixel.leftEdge {
+  border-left: 3px solid #f00;
+}
+.pixel.rightEdge {
+  border-right: 3px solid #f00;
 }
