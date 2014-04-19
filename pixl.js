@@ -13,9 +13,8 @@ Pixl = function() {
 	canvasDimensions = 600,
 	currentColour,
 	canvasSize,
-	layerRecording = false,
+	currentLayer = 'default',
 	mouseIsDown = false,
-	defaultLayerName = 'newLayer',
 	createPixels = function(countPerAxis) {
 		var canvas = $('#canvas'),
 		i, pixel;
@@ -30,9 +29,7 @@ Pixl = function() {
 	},
 	handlePixelClick = function() {
 		$(this).css('background-color', currentColour).attr('data-baseColour', currentColour).removeClass('empty');
-		if(layerRecording) {
-			$(this).attr('data-layername', defaultLayerName);
-		}
+		$(this).attr('data-layername', currentLayer);
 	},
 	isLayerEdge = function(x, y, layerName, direction) {
 		x = parseInt(x);
@@ -57,20 +54,13 @@ Pixl = function() {
 		$('#canvas').mousedown(function() { mouseIsDown = true; });
 		$('#canvas').mouseup(function() { mouseIsDown = false; });
 		$('#canvas').mouseleave(function() { mouseIsDown = false; });
-		$('#recordNewLayer').click(toggleRecording);
+		$('#createNewLayer').click(createNewLayer);
 	},
-	toggleRecording = function() {
-		if(layerRecording) {
-			var layerName = prompt("Please name the new layer", "LayerX");
-			$(this).html('start recording a new layer');
-			$('.pixel[data-layername=' + defaultLayerName + ']').attr('data-layername', layerName);
-			$('#selectLayer').append('<option value="' + layerName + '">' + layerName + '</option>').removeAttr('disabled');
-			flashLayerBounds(layerName);
-		}
-		else {
-			$(this).html('stop recording');
-		}
-		layerRecording = !layerRecording;
+	createNewLayer = function() {
+		var layerName = prompt("Please name the new layer", "LayerX");
+		$('#selectLayer option:selected').removeAttr('selected');
+		$('#selectLayer').append('<option selected value="' + layerName + '">' + layerName + '</option>').removeAttr('disabled');
+		$('#selectLayer').change();
 	},
 	handleMouseDownStateChange = function(state) {
 		mouseIsDown = state;
@@ -112,14 +102,8 @@ Pixl = function() {
 		$('select#selectLayer').attr('disabled', 'disabled').change(handleLayerSelect);
 	},
 	handleLayerSelect = function() {
-		var layerName = $(this).val();
-		if(layerName !== 'noselect') {
-			flashLayerBounds(layerName);
-			addLighting(0, 0, 0.5, 0.1, layerName);
-		}
-		else {
-
-		}
+		currentLayer = $(this).val();
+		flashLayerBounds(currentLayer);
 	},
 	shadeColor = function(color, percent) {
 		// from http://stackoverflow.com/questions/5560248/programmatically-lighten-or-darken-a-hex-color-or-rgb-and-blend-colors
