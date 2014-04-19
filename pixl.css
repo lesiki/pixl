@@ -1,0 +1,18 @@
+* {
+  box-sizing: border-box;
+}
+#canvas {
+  width: 610px;
+  height: 610px;
+  border: 5px solid #888;
+}
+.pixel {
+  display: inline-block;
+}
+.pixel.empty {
+  border: 3px solid #eee;
+}
+.pixel.s60 {
+  width: 60px;
+  height: 60px;
+}
