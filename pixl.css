@@ -28,7 +28,7 @@ body {
   cursor: pointer;
 }
 .pixel.empty {
-  border: 3px solid #eee;
+  border: 1px solid #fafafa;
 }
 .pixel.s20 {
   width: 20px;
