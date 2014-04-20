@@ -10,8 +10,13 @@ Pixl = function() {
 		BOTTOM : 3,
 		LEFT : 4
 	},
+	DrawModes = {
+		PEN : 0,
+		FILL : 1
+	},
 	canvasDimensions = 600,
 	currentColour,
+	currentDrawMode = DrawModes.PEN,
 	canvasSize,
 	currentLayer = 'default',
 	mouseIsDown = false,
@@ -28,8 +33,44 @@ Pixl = function() {
 		$('.pixel').addClass("s" + size);
 	},
 	handlePixelClick = function() {
-		$(this).css('background-color', currentColour).attr('data-baseColour', currentColour).removeClass('empty');
-		$(this).attr('data-layername', currentLayer);
+		if(currentDrawMode === DrawModes.PEN) {
+			$(this).css('background-color', currentColour).attr('data-baseColour', currentColour).removeClass('empty');
+			$(this).attr('data-layername', currentLayer);
+		}
+		else {
+			handleFill($(this).attr('data-x'), $(this).attr('data-y'), $(this).attr('data-baseColour'));
+		}
+	},
+	handleFill = function(x, y, previousColour) {
+		var other;
+		x = parseInt(x);
+		y = parseInt(y);
+		$('.pixel[data-x=' + x + '][data-y=' + y + ']').css('background-color', currentColour).attr('data-baseColour', currentColour).removeClass('empty');
+		if(x < (canvasSize - 1)) {
+			other = $('.pixel[data-x=' + (x + 1) + '][data-y=' + y + ']');
+			if($(other).attr('data-baseColour') === previousColour) {
+				handleFill(x + 1, y, previousColour);
+			}
+		}
+		if(x > 0) {
+			other = $('.pixel[data-x=' + (x - 1) + '][data-y=' + y + ']');
+			if($(other).attr('data-baseColour') === previousColour) {
+				handleFill(x - 1, y, previousColour);
+			}
+		}
+		if(y < (canvasSize - 1)) {
+			other = $('.pixel[data-x=' + x  + '][data-y=' + (y + 1) + ']');
+			if($(other).attr('data-baseColour') === previousColour) {
+				handleFill(x, y + 1, previousColour);
+			}
+		}
+		if(y > 0) {
+			other = $('.pixel[data-x=' + x + '][data-y=' + (y - 1) + ']');
+			if($(other).attr('data-baseColour') === previousColour) {
+				handleFill(x, y - 1, previousColour);
+			}
+		}
+		
 	},
 	isLayerEdge = function(x, y, layerName, direction) {
 		x = parseInt(x);
@@ -56,6 +97,10 @@ Pixl = function() {
 		$('#canvas').mouseleave(function() { mouseIsDown = false; });
 		$('#createNewLayer').click(createNewLayer);
 		$('#addLight').click(function() { addLighting(0, 0, 0.1, 0.4, currentLayer); });
+		$('input[name=drawMode]').change(handleDrawModeChange);
+	},
+	handleDrawModeChange = function() {
+		currentDrawMode = parseInt($(this).val());
 	},
 	createNewLayer = function() {
 		var layerName = prompt("Please name the new layer", "LayerX");
@@ -108,6 +153,7 @@ Pixl = function() {
 				$('#colourPicker').spectrum('set', currentColour);
 			}
 		});
+		$('input[name=drawMode][value=0]').attr('checked', 'checked');
 	},
 	handleColourChange = function(colour) {
 		currentColour = colour.toHexString();
