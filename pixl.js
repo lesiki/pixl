@@ -12,7 +12,9 @@ Pixl = function() {
 	},
 	DrawModes = {
 		PEN : 0,
-		FILL : 1
+		FILL : 1,
+		CHOOSE_LIGHT_ORIGIN: 2,
+		REVIEW_LIGHTING: 3
 	},
 	canvasDimensions = 600,
 	currentColour,
@@ -37,8 +39,11 @@ Pixl = function() {
 			$(this).css('background-color', currentColour).attr('data-baseColour', currentColour).removeClass('empty');
 			$(this).attr('data-layername', currentLayer);
 		}
-		else {
+		else if(currentDrawMode === DrawModes.FILL) {
 			handleFill($(this).attr('data-x'), $(this).attr('data-y'), $(this).attr('data-baseColour'));
+		}
+		else if(currentDrawMode === DrawModes.CHOOSE_LIGHT_ORIGIN) {
+			handleLightOriginSelection($(this).attr('data-x'), $(this).attr('data-y'));
 		}
 	},
 	handleFill = function(x, y, previousColour) {
@@ -96,8 +101,41 @@ Pixl = function() {
 		$('#canvas').mouseup(function() { mouseIsDown = false; });
 		$('#canvas').mouseleave(function() { mouseIsDown = false; });
 		$('#createNewLayer').click(createNewLayer);
-		$('#addLight').click(function() { addLighting(0, 0, 0.1, 0.4, currentLayer); });
+		$('#addLight').click(handleAddLightClick);
+		$('#reset').click(handleCancelLight);
 		$('input[name=drawMode]').change(handleDrawModeChange);
+	},
+	handleCancelLight = function() {
+		$('.pixel[data-layername="' + currentLayer + '"]').each(function() {
+			$(this).css('background-color', $(this).attr('data-baseColour'));
+		});
+		$('#addLight').html("Add Light to Layer");
+		$('input[name=drawMode]:checked').removeAttr('checked');
+		$('input[name=drawMode][value=0]').attr('checked', 'checked').change();
+	},
+	handleAddLightClick = function() {
+		if(currentDrawMode === DrawModes.REVIEW_LIGHTING) {
+			commitLayerLighting();
+		}
+		else {
+			currentDrawMode = DrawModes.CHOOSE_LIGHT_ORIGIN;
+			$(this).html('Select light origin');
+			$('#reset,#addLight').attr('disabled', 'disabled');
+		}
+	},
+	commitLayerLighting = function() {
+		$('.pixel[data-layername="' + currentLayer + '"]').each(function() {
+			$(this).attr('data-baseColour', rgbToHex($(this).css('background-color')));
+		});
+		$('#addLight').html("Add Light to Layer");
+		$('input[name=drawMode]:checked').removeAttr('checked');
+		$('input[name=drawMode][value=0]').attr('checked', 'checked').change();
+	},
+	handleLightOriginSelection = function(x, y) {
+		currentDrawMode = DrawModes.REVIEW_LIGHTING;
+		$('#reset,#addLight').removeAttr('disabled');
+		addLighting(parseInt(x), parseInt(y), parseFloat($('input[name=maxIntensity]').val()), parseFloat($('input[name=minIntensity]').val()), currentLayer);
+		$('#addLight').html('Apply Lighting');
 	},
 	handleDrawModeChange = function() {
 		currentDrawMode = parseInt($(this).val());
@@ -228,6 +266,13 @@ Pixl = function() {
 			}
 			$(this).css('background-color', newColour);
 		});
+	},
+	rgbToHex = function(rgb) {
+		rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+		function hex(x) {
+			return ("0" + parseInt(x).toString(16)).slice(-2);
+		}
+		return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
 	},
 	init = function() {
 		canvasSize = 30;
