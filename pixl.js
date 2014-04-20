@@ -101,6 +101,16 @@ Pixl = function() {
 	},
 	initialiseTools = function() {
 		$('select#selectLayer').attr('disabled', 'disabled').change(handleLayerSelect);
+		$('#colourPicker').spectrum({
+			color: currentColour,
+			move: handleColourChange,
+			hide: function() {
+				$('#colourPicker').spectrum('set', currentColour);
+			}
+		});
+	},
+	handleColourChange = function(colour) {
+		currentColour = colour.toHexString();
 	},
 	handleLayerSelect = function() {
 		currentLayer = $(this).val();
