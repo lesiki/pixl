@@ -190,6 +190,11 @@ Pixl = function() {
 		$('select#selectLayer').attr('disabled', 'disabled').change(handleLayerSelect);
 		$('#colourPicker').spectrum({
 			color: currentColour,
+			showInput: true,
+			preferredFormat: 'hex',
+			showPalette: true,
+			showButtons: false,
+			showSelectionPalette: true,
 			move: handleColourChange,
 			hide: function() {
 				$('#colourPicker').spectrum('set', currentColour);
@@ -282,7 +287,7 @@ Pixl = function() {
 		canvasSize = 30;
 		createPixels(canvasSize);
 		sizePixels(canvasSize);
-		currentColour = "#789491";
+		currentColour = "#9400d3";
 		bindListeners();
 		initialiseTools();
 	};
