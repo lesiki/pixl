@@ -45,7 +45,7 @@ Pixl = function() {
 		var other;
 		x = parseInt(x);
 		y = parseInt(y);
-		$('.pixel[data-x=' + x + '][data-y=' + y + ']').css('background-color', currentColour).attr('data-baseColour', currentColour).removeClass('empty');
+		$('.pixel[data-x=' + x + '][data-y=' + y + ']').css('background-color', currentColour).attr('data-baseColour', currentColour).removeClass('empty').attr('data-layername', currentLayer);
 		if(x < (canvasSize - 1)) {
 			other = $('.pixel[data-x=' + (x + 1) + '][data-y=' + y + ']');
 			if($(other).attr('data-baseColour') === previousColour) {
@@ -183,11 +183,10 @@ Pixl = function() {
 		return "#"+RR+GG+BB;
 	}
 	addLighting = function(lightSourceX, lightSourceY, maxLightIntensity, minLightIntensity, layerName) {
-		console.log('hi');
 		var thisPixelX, thisPixelY, distanceFromLight, baseColour, distanceAsFractionOfMaxDistance, newColour;
 		lightSourceX = parseInt(lightSourceX);
 		lightSourceY = parseInt(lightSourceY);
-		$('.pixel[data-layername=' + layerName + ']').each(function() {
+		$('.pixel[data-layername="' + layerName + '"]').each(function() {
 			thisPixelX = parseInt($(this).attr('data-x'));
 			thisPixelY = parseInt($(this).attr('data-y'));
 			baseColour = $(this).attr('data-baseColour');
