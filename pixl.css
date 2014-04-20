@@ -23,9 +23,14 @@ body {
 }
 #toolkit #layerTools,
 #toolkit #lightTools,
-#toolkit #drawTools {
+#toolkit #drawTools,
+#toolkit #new {
   border-bottom: 1px solid #ccc;
   padding: 5px;
+}
+#toolkit #new {
+  background-color: #cac;
+  border-left: 4px solid #c7c;
 }
 #toolkit #layerTools {
   background-color: #caa;
@@ -35,15 +40,18 @@ body {
   background-color: #aac;
   border-left: 4px solid #77c;
 }
+#toolkit #drawTools input {
+  display: inline-block;
+}
 #toolkit #lightTools {
   background-color: #aca;
   border-left: 4px solid #7c7;
 }
-#toolkit #lightTools label {
+#toolkit label {
   font-size: 0.8em;
   color: #444;
 }
-#toolkit #lightTools input {
+#toolkit input {
   display: block;
   margin-left: 4px;
   margin-bottom: 5px;
@@ -63,13 +71,17 @@ body {
   width: 20px;
   height: 20px;
 }
+.pixel.s30 {
+  width: 30px;
+  height: 30px;
+}
 .pixel.s60 {
   width: 60px;
   height: 60px;
 }
-.pixel.s10 {
-  width: 10px;
-  height: 10px;
+.pixel.s120 {
+  width: 120;
+  height: 120;
 }
 .pixel.topEdge {
   border-top: 3px solid #f00;

@@ -28,9 +28,13 @@ body {
 	border:5px solid #333;
 	max-width:400px;
 	display:inline-block;
-	#layerTools,#lightTools,#drawTools {
+	#layerTools,#lightTools,#drawTools,#new {
 		border-bottom:1px solid #ccc;
 		padding:5px;
+	}
+	#new {
+		background-color:#cac;
+		border-left:4px solid #c7c;
 	}
 	#layerTools {
 		background-color:#caa;
@@ -39,19 +43,22 @@ body {
 	#drawTools {
 		background-color:#aac;
 		border-left:4px solid #77c;
+		input {
+			display:inline-block;
+		}
 	}
 	#lightTools {
 		background-color:#aca;
 		border-left:4px solid #7c7;
-		label {
-			font-size:0.8em;
-			color:#444;
-		}
-		input {
-			display:block;
-			margin-left:4px;
-			margin-bottom:5px;
-		}
+	}
+	label {
+		font-size:0.8em;
+		color:#444;
+	}
+	input {
+		display:block;
+		margin-left:4px;
+		margin-bottom:5px;
 	}
 }
 .pixel {
@@ -64,13 +71,17 @@ body {
 		width:20px;
 		height:20px;
 	}
+	&.s30 {
+		width:30px;
+		height:30px;
+	}
 	&.s60 {
 		width:60px;
 		height:60px;
 	}
-	&.s10 {
-		width:10px;
-		height:10px;
+	&.s120 {
+		width:120;
+		height:120;
 	}
 	&.topEdge {
 		border-top:3px solid #f00;

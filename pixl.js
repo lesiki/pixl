@@ -25,6 +25,7 @@ Pixl = function() {
 	createPixels = function(countPerAxis) {
 		var canvas = $('#canvas'),
 		i, pixel;
+		canvas.html('');
 		for(i=0; i < (countPerAxis * countPerAxis); i++) {
 			pixel = '<div class="empty pixel" data-x="' + (i % countPerAxis) + '" data-y="' + Math.floor(i/countPerAxis) + '"></div>';
 			canvas.append(pixel);
@@ -108,6 +109,10 @@ Pixl = function() {
 		$('#addLight').click(handleAddLightClick);
 		$('#reset').click(handleCancelLight);
 		$('input[name=drawMode]').change(handleDrawModeChange);
+		$('#resetCanvas').click(resetCanvas);
+	},
+	resetCanvas = function() {
+		init(parseInt($('#canvasSize').val()));
 	},
 	handleCancelLight = function() {
 		$('.pixel[data-layername="' + currentLayer + '"]').each(function() {
@@ -283,13 +288,12 @@ Pixl = function() {
 		}
 		return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
 	},
-	init = function() {
-		canvasSize = 30;
+	init = function(canvasSize) {
 		createPixels(canvasSize);
 		sizePixels(canvasSize);
 		currentColour = "#9400d3";
 		bindListeners();
 		initialiseTools();
 	};
-	init();
+	init(10);
 };
