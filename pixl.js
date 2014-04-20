@@ -77,21 +77,25 @@ Pixl = function() {
 		}
 		
 	},
-	isLayerEdge = function(x, y, layerName, direction) {
+	isLayerEdge = function(x, y, layerName, direction, includeCanvasEdges) {
 		x = parseInt(x);
 		y = parseInt(y);
 		// Assumes specified pixel is in the layer
 		if(direction === Directions.TOP) {
-			return y === 0 || $('.pixel[data-x=' + x + '][data-y=' + (y - 1) + ']').attr('data-layername') !== layerName;
+			if(y === 0) return includeCanvasEdges;
+			return $('.pixel[data-x=' + x + '][data-y=' + (y - 1) + ']').attr('data-layername') !== layerName;
 		}
 		else if(direction === Directions.BOTTOM) {
-			return y === (canvasSize - 1) || $('.pixel[data-x=' + x + '][data-y=' + (y + 1) + ']').attr('data-layername') !== layerName;
+			if(y === (canvasSize - 1)) return includeCanvasEdges;
+			return $('.pixel[data-x=' + x + '][data-y=' + (y + 1) + ']').attr('data-layername') !== layerName;
 		}
 		else if(direction === Directions.RIGHT) {
-			return x === (canvasSize - 1) || $('.pixel[data-x=' + (x + 1) + '][data-y=' + y + ']').attr('data-layername') !== layerName;
+			if(x === (canvasSize - 1)) return includeCanvasEdges;
+			return $('.pixel[data-x=' + (x + 1) + '][data-y=' + y + ']').attr('data-layername') !== layerName;
 		}
 		else if(direction === Directions.LEFT) {
-			return x === 0 || $('.pixel[data-x=' + (x - 1) + '][data-y=' + y + ']').attr('data-layername') !== layerName;
+			if(x === 0) return includeCanvasEdges;
+			return $('.pixel[data-x=' + (x - 1) + '][data-y=' + y + ']').attr('data-layername') !== layerName;
 		}
 		return false;
 	},
@@ -167,16 +171,16 @@ Pixl = function() {
 		var thisPixel;
 		$('.pixel[data-layername=' + layername + ']').each(function() {
 			thisPixel = $(this);
-			if(isLayerEdge(thisPixel.attr('data-x'), thisPixel.attr('data-y'), layername, Directions.TOP)) {
+			if(isLayerEdge(thisPixel.attr('data-x'), thisPixel.attr('data-y'), layername, Directions.TOP, true)) {
 				thisPixel.addClass('topEdge');
 			}
-			if(isLayerEdge(thisPixel.attr('data-x'), thisPixel.attr('data-y'), layername, Directions.BOTTOM)) {
+			if(isLayerEdge(thisPixel.attr('data-x'), thisPixel.attr('data-y'), layername, Directions.BOTTOM, true)) {
 				thisPixel.addClass('bottomEdge');
 			}
-			if(isLayerEdge(thisPixel.attr('data-x'), thisPixel.attr('data-y'), layername, Directions.LEFT)) {
+			if(isLayerEdge(thisPixel.attr('data-x'), thisPixel.attr('data-y'), layername, Directions.LEFT, true)) {
 				thisPixel.addClass('leftEdge');
 			}
-			if(isLayerEdge(thisPixel.attr('data-x'), thisPixel.attr('data-y'), layername, Directions.RIGHT)) {
+			if(isLayerEdge(thisPixel.attr('data-x'), thisPixel.attr('data-y'), layername, Directions.RIGHT, true)) {
 				thisPixel.addClass('rightEdge');
 			}
 		});
@@ -233,34 +237,34 @@ Pixl = function() {
 			newColour = shadeColor(baseColour, (minLightIntensity + ((1 - distanceAsFractionOfMaxDistance) * maxLightIntensity) * 100));
 			// Process Edges
 			if(thisPixelY > lightSourceY) {
-				if(isLayerEdge(thisPixelX, thisPixelY, layerName, Directions.TOP)) {
+				if(isLayerEdge(thisPixelX, thisPixelY, layerName, Directions.TOP, false)) {
 					newColour = shadeColor(newColour, 5);
 				}
-				else if(isLayerEdge(thisPixelX, thisPixelY, layerName, Directions.BOTTOM)) {
+				else if(isLayerEdge(thisPixelX, thisPixelY, layerName, Directions.BOTTOM, false)) {
 					newColour = shadeColor(newColour, -5);
 				}
 			}
 			if(thisPixelY < lightSourceY) {
-				if(isLayerEdge(thisPixelX, thisPixelY, layerName, Directions.BOTTOM)) {
+				if(isLayerEdge(thisPixelX, thisPixelY, layerName, Directions.BOTTOM, false)) {
 					newColour = shadeColor(newColour, 5);
 				}
-				else if(isLayerEdge(thisPixelX, thisPixelY, layerName, Directions.TOP)) {
+				else if(isLayerEdge(thisPixelX, thisPixelY, layerName, Directions.TOP, false)) {
 					newColour = shadeColor(newColour, -5);
 				}
 			}
 			if(thisPixelX > lightSourceX) {
-				if(isLayerEdge(thisPixelX, thisPixelY, layerName, Directions.LEFT)) {
+				if(isLayerEdge(thisPixelX, thisPixelY, layerName, Directions.LEFT, false)) {
 					newColour = shadeColor(newColour, 5);
 				}
-				else if(isLayerEdge(thisPixelX, thisPixelY, layerName, Directions.RIGHT)) {
+				else if(isLayerEdge(thisPixelX, thisPixelY, layerName, Directions.RIGHT, false)) {
 					newColour = shadeColor(newColour, -5);
 				}
 			}
 			if(thisPixelX < lightSourceX) {
-				if(isLayerEdge(thisPixelX, thisPixelY, layerName, Directions.RIGHT)) {
+				if(isLayerEdge(thisPixelX, thisPixelY, layerName, Directions.RIGHT, false)) {
 					newColour = shadeColor(newColour, 5);
 				}
-				else if(isLayerEdge(thisPixelX, thisPixelY, layerName, Directions.LEFT)) {
+				else if(isLayerEdge(thisPixelX, thisPixelY, layerName, Directions.LEFT, false)) {
 					newColour = shadeColor(newColour, -5);
 				}
 			}
