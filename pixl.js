@@ -288,7 +288,8 @@ Pixl = function() {
 		}
 		return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
 	},
-	init = function(canvasSize) {
+	init = function(size) {
+		canvasSize = size;
 		createPixels(canvasSize);
 		sizePixels(canvasSize);
 		currentColour = "#9400d3";
