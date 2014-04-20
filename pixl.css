@@ -4,6 +4,11 @@
 body {
   font-size: 0;
   background-color: #333;
+  font-family: "Courier New", Courier, monospace;
+}
+#wrap {
+  margin: 10px auto;
+  text-align: center;
 }
 #canvas {
   vertical-align: top;
@@ -14,6 +19,7 @@ body {
   display: inline-block;
 }
 #toolkit {
+  text-align: left;
   background-color: #eee;
   font-size: 12pt;
   vertical-align: top;
@@ -24,9 +30,21 @@ body {
 #toolkit #layerTools,
 #toolkit #lightTools,
 #toolkit #drawTools,
-#toolkit #new {
-  border-bottom: 1px solid #ccc;
+#toolkit #new,
+#toolkit #about {
+  border-bottom: 1px solid #333;
   padding: 5px;
+}
+#toolkit #about {
+  text-align: center;
+  font-size: 0.8em;
+  background-color: #444;
+  border-left: 4px solid #111;
+  color: #ccc;
+}
+#toolkit #about a {
+  color: #eee;
+  text-decoration: none;
 }
 #toolkit #new {
   background-color: #cac;
