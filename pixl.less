@@ -1,4 +1,3 @@
-* { box-sizing:border-box; }
 .property_(@property, @value) {
     _: 0 ~"; @{property}:" @value;
 }
@@ -8,6 +7,11 @@
     .property_( '-khtml-@{property}', @value);
     .property_(   '-moz-@{property}', @value);
     .property_(          @property,   @value);
+}
+* { 
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing: border-box;
 }
 body {
 	font-size:0;
